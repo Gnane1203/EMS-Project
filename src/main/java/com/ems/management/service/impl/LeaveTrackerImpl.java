@@ -4,11 +4,15 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.ems.management.models.LeaveTracker;
 import com.ems.management.repository.LeaveTrackerRepository;
 import com.ems.management.service.LeaveTrackerService;
 
+import jakarta.transaction.Transactional;
+
+@Service
 public class LeaveTrackerImpl implements LeaveTrackerService{
 
     @Autowired
@@ -30,6 +34,7 @@ public class LeaveTrackerImpl implements LeaveTrackerService{
     }
 
     @Override
+    @Transactional
     public LeaveTracker updateLeaveBalance(Long empId, int usedLeaves) {
         Optional<LeaveTracker> trackerOpt = leaveTrackerRepository.findByEmployeeId(empId);
         if (trackerOpt.isPresent()) {

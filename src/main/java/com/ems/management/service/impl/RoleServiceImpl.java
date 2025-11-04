@@ -3,11 +3,13 @@ package com.ems.management.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.ems.management.models.Role;
 import com.ems.management.repository.RoleRepository;
 import com.ems.management.service.RoleService;
 
+@Service
 public class RoleServiceImpl implements RoleService{
 
 	 @Autowired

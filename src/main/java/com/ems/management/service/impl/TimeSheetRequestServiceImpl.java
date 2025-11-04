@@ -12,6 +12,8 @@ import com.ems.management.repository.EmployeeRepository;
 import com.ems.management.repository.TimeSheetRequestRepository;
 import com.ems.management.service.TimeSheetRequestService;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class TimeSheetRequestServiceImpl implements TimeSheetRequestService {
 
@@ -25,6 +27,7 @@ public class TimeSheetRequestServiceImpl implements TimeSheetRequestService {
     // =============================
     // Employee submits a timesheet
     // =============================
+    @Transactional
     @Override
     public TimeSheetRequest submitTimeSheet(TimeSheetRequest timeSheetRequest) {
         // Fetch employee to attach correct manager (approver)
@@ -46,6 +49,7 @@ public class TimeSheetRequestServiceImpl implements TimeSheetRequestService {
     // =============================
     // Get all timesheets for an employee
     // =============================
+    @Transactional
     @Override
     public List<TimeSheetRequest> getEmployeeTimeSheets(Long empId) {
         return timeSheetRepo.findByEmployeeEmpId(empId);
@@ -78,6 +82,7 @@ public class TimeSheetRequestServiceImpl implements TimeSheetRequestService {
     // =============================
     // Approve a timesheet
     // =============================
+    @Transactional
     @Override
     public TimeSheetRequest approveTimeSheet(Long sheetId, String mgrComments) {
         TimeSheetRequest ts = timeSheetRepo.findById(sheetId)
@@ -94,6 +99,7 @@ public class TimeSheetRequestServiceImpl implements TimeSheetRequestService {
     // =============================
     // Reject a timesheet
     // =============================
+    @Transactional
     @Override
     public TimeSheetRequest rejectTimeSheet(Long sheetId, String mgrComments) {
         TimeSheetRequest ts = timeSheetRepo.findById(sheetId)

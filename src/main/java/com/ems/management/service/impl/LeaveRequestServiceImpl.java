@@ -1,10 +1,11 @@
 package com.ems.management.service.impl;
 
-import java.time.LocalDateTime;
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
+
+import org.springframework.stereotype.Service;
 
 import com.ems.management.models.Employee;
 import com.ems.management.models.LeaveRequest;
@@ -12,7 +13,9 @@ import com.ems.management.repository.EmployeeRepository;
 import com.ems.management.repository.LeaveRequestRepository;
 import com.ems.management.service.LeaveRequestService;
 
+import jakarta.transaction.Transactional;
 
+@Service
 public class LeaveRequestServiceImpl  implements LeaveRequestService{
 
 	@Autowired
@@ -20,7 +23,8 @@ public class LeaveRequestServiceImpl  implements LeaveRequestService{
 	
 	@Autowired
     private EmployeeRepository employeeRepo;
-
+	
+	@Transactional
     @Override
     public LeaveRequest applyLeave(LeaveRequest leaveRequest) {
     	 // Auto-set approver based on assigned manager
@@ -40,6 +44,7 @@ public class LeaveRequestServiceImpl  implements LeaveRequestService{
     }
 
     //  Manager approves or rejects leave
+	@Transactional
     @Override
     public LeaveRequest updateLeaveStatus(Long leaveId, String status, String mgrComments) {
         LeaveRequest leave = repo.findById(leaveId)

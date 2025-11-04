@@ -3,11 +3,13 @@ package com.ems.management.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.ems.management.models.Project;
 import com.ems.management.repository.ProjectRepository;
 import com.ems.management.service.ProjectService;
 
+@Service
 public class ProjectServiceImpl implements ProjectService{
 
 
@@ -36,7 +38,8 @@ public class ProjectServiceImpl implements ProjectService{
 
     @Override
     public Project getProjectById(Long id) {
-        return repo.findById(id).orElse(null);
+        return repo.findById(id)
+        		.orElseThrow(() -> new RuntimeException("Project not found with ID: " + id));
     }
 
     @Override
