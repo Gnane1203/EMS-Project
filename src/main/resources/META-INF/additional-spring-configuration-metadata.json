@@ -1,0 +1,5 @@
+{"properties": [{
+  "name": "app.consumers",
+  "type": "java.lang.String",
+  "description": "A description for 'app.consumers'"
+}]}

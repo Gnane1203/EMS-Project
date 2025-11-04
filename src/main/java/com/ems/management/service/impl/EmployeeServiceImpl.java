@@ -1,15 +1,21 @@
 package com.ems.management.service.impl;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import com.ems.management.models.Employee;
 import com.ems.management.repository.EmployeeRepository;
 import com.ems.management.service.EmployeeService;
 
-public class EmployeeServiceImpl implements EmployeeService{
+
+public class EmployeeServiceImpl implements EmployeeService, UserDetailsService{
 	
 	@Autowired
     private EmployeeRepository repo;
@@ -50,5 +56,16 @@ public class EmployeeServiceImpl implements EmployeeService{
         }
         return false;
     }
+
+    @Override
+	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+		Employee user = repo.findByEmail(email)
+				.orElseThrow(() -> new UsernameNotFoundException("user not found"));
+
+		
+		return org.springframework.security.core.userdetails.User.builder().username(email).password(user.getPasswordHash())
+				.authorities(Collections.singletonList(new SimpleGrantedAuthority(user.getRole().getRoleName())))
+				.build();
+	}
 
 }
