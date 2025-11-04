@@ -7,8 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ems.management.models.Employee;
+import com.ems.management.models.OvertimeTracker;
 import com.ems.management.models.TimeSheetRequest;
 import com.ems.management.repository.EmployeeRepository;
+import com.ems.management.repository.OvertimeTrackerRepository;
 import com.ems.management.repository.TimeSheetRequestRepository;
 import com.ems.management.service.TimeSheetRequestService;
 
@@ -22,6 +24,9 @@ public class TimeSheetRequestServiceImpl implements TimeSheetRequestService {
 
     @Autowired
     private EmployeeRepository employeeRepo;
+    
+    @Autowired
+    private OvertimeTrackerRepository overtimeRepo;
 
     
     // =============================
@@ -38,7 +43,17 @@ public class TimeSheetRequestServiceImpl implements TimeSheetRequestService {
         if (emp.getPrimaryManager() != null) {
             timeSheetRequest.setApprover(emp.getPrimaryManager());
         }
+        
+        float workedHours = timeSheetRequest.getHoursWorked();
+        float overtime = workedHours > 8 ? workedHours - 8 : 0;
 
+
+        //  Only record overtime if ≥ 4 hours extra
+        if (overtime >= 4) {
+            OvertimeTracker ot = new OvertimeTracker(emp, timeSheetRequest.getDate(), overtime);
+            overtimeRepo.save(ot);
+        }
+        
         // Set metadata
         timeSheetRequest.setEmployee(emp);
         timeSheetRequest.setStatus("PENDING");
