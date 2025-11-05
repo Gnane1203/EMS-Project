@@ -20,13 +20,13 @@ public class LeaveTracker {
     private Employee employee;
 
     @Column(nullable = false)
-    private int casualLeaves = 0;
+    private int casualLeaves = 12;
 
     @Column(nullable = false)
-    private int sickLeaves = 0;
+    private int sickLeaves = 10;
 
     @Column(nullable = false)
-    private int maternityLeaves = 0;
+    private int maternityLeaves = 180;
 
     @Column(nullable = false)
     private int usedLeaves = 0;
@@ -39,8 +39,17 @@ public class LeaveTracker {
     public LeaveTracker() {
     	
     }
+    
+    
 
-    //all arg constructor
+    public LeaveTracker(Employee employee) {
+		super();
+		this.employee = employee;
+	}
+
+
+
+	//all arg constructor
     public LeaveTracker(Employee employee, int casualLeaves, int sickLeaves, int maternityLeaves, int usedLeaves) {
         this.employee = employee;
         this.casualLeaves = casualLeaves;

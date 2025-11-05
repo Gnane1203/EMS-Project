@@ -13,7 +13,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import com.ems.management.models.Employee;
+import com.ems.management.models.LeaveTracker;
 import com.ems.management.repository.EmployeeRepository;
+import com.ems.management.repository.LeaveTrackerRepository;
 import com.ems.management.service.EmployeeService;
 
 import jakarta.transaction.Transactional;
@@ -26,14 +28,39 @@ public class EmployeeServiceImpl implements EmployeeService, UserDetailsService{
 	@Autowired
     private EmployeeRepository repo;
 
+	@Autowired
+	private LeaveTrackerRepository leaveTrackerRepo;
+	
 	//create employee
 	@Transactional
     @Override
     public Employee register(Employee employee) {
+		
 		if (repo.findByEmail(employee.getEmail()).isPresent()) {
 	        throw new RuntimeException("Email already registered: " + employee.getEmail());
 	    }
-    	return repo.save(employee);
+		// Save employee first
+    	Employee savedEmp = repo.save(employee);
+        // Create default LeaveTracker
+        LeaveTracker tracker = new LeaveTracker(savedEmp);
+        tracker.setCasualLeaves(12);
+        tracker.setSickLeaves(10);
+        
+        //  Assign maternity leave based on gender
+        
+        if (savedEmp.getGender().equalsIgnoreCase("FEMALE")) {
+            tracker.setMaternityLeaves(180); // ~6 months
+        } else {
+            tracker.setMaternityLeaves(0); // Male employees are not eligible
+        }
+        
+        tracker.setUsedLeaves(0);
+
+        // Save leave tracker record
+        leaveTrackerRepo.save(tracker);	
+        
+        return savedEmp;
+    	
     }
 
     //find an employee or get

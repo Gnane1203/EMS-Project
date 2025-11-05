@@ -32,6 +32,9 @@ public class Employee {
     @Column(unique=true, nullable=false)
     private String email;
     
+    @Column(nullable = false)
+    private String gender; // Values: "MALE" or "FEMALE"
+    
     private String passwordHash;
     
     private String empType;
@@ -84,6 +87,12 @@ public class Employee {
 	}
 	public void setEmail(String email) {
 		this.email = email;
+	}
+	public String getGender() {
+		return gender;
+	}
+	public void setGender(String gender) {
+		this.gender = gender;
 	}
 	public String getPasswordHash() {
 		return passwordHash;
@@ -162,13 +171,14 @@ public class Employee {
 		updatedAt = LocalDateTime.now();
 	}
 	
-	public Employee(Long empId, String empName, String email, String passwordHash, String empType,
+	public Employee(Long empId, String empName, String email,String gender, String passwordHash, String empType,
 			LocalDate joiningDate, LocalDate resignationDate, Boolean active, Boolean isAdmin, Role role,
 			Employee primaryManager, Set<Project> projects) {
 		super();
 		this.empId = empId;
 		this.empName = empName;
 		this.email = email;
+		this.gender = gender;
 		this.passwordHash = passwordHash;
 		this.empType = empType;
 		this.joiningDate = joiningDate;
