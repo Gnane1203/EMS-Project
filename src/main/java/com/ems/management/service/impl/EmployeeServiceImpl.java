@@ -11,6 +11,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.ems.management.models.Employee;
 import com.ems.management.models.LeaveTracker;
@@ -31,6 +32,9 @@ public class EmployeeServiceImpl implements EmployeeService, UserDetailsService{
 	@Autowired
 	private LeaveTrackerRepository leaveTrackerRepo;
 	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+	
 	//create employee
 	@Transactional
     @Override
@@ -39,6 +43,11 @@ public class EmployeeServiceImpl implements EmployeeService, UserDetailsService{
 		if (repo.findByEmail(employee.getEmail()).isPresent()) {
 	        throw new RuntimeException("Email already registered: " + employee.getEmail());
 	    }
+		String hashPassword=passwordEncoder.encode(employee.getPasswordHash());
+		// Encoding the password
+	    employee.setPasswordHash(hashPassword);
+	    
+	    
 		// Save employee first
     	Employee savedEmp = repo.save(employee);
         // Create default LeaveTracker
@@ -58,7 +67,7 @@ public class EmployeeServiceImpl implements EmployeeService, UserDetailsService{
 
         // Save leave tracker record
         leaveTrackerRepo.save(tracker);	
-        
+         
         return savedEmp;
     	
     }

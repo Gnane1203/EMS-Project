@@ -25,7 +25,7 @@ public class LeaveTrackerImpl implements LeaveTrackerService{
 
     @Override
     public Optional<LeaveTracker> getTrackerByEmployeeId(Long empId) {
-        return leaveTrackerRepository.findByEmployeeId(empId);
+        return leaveTrackerRepository.findByEmployee_empId(empId);
     }
 
     @Override
@@ -36,7 +36,7 @@ public class LeaveTrackerImpl implements LeaveTrackerService{
     @Override
     @Transactional
     public LeaveTracker updateLeaveBalance(Long empId, int usedLeaves) {
-        Optional<LeaveTracker> trackerOpt = leaveTrackerRepository.findByEmployeeId(empId);
+        Optional<LeaveTracker> trackerOpt = leaveTrackerRepository.findByEmployee_empId(empId);
         if (trackerOpt.isPresent()) {
             LeaveTracker tracker = trackerOpt.get();
             tracker.setUsedLeaves(tracker.getUsedLeaves() + usedLeaves);

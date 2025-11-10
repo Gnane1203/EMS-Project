@@ -103,7 +103,7 @@ public class LeaveRequestServiceImpl  implements LeaveRequestService{
      
      //  2. Handle regular leave types
         else {
-        	LeaveTracker tracker = leaveTrackerRepo.findByEmployeeId(emp.getEmpId())
+        	LeaveTracker tracker = leaveTrackerRepo.findByEmployee_empId(emp.getEmpId())
                     .orElseThrow(() -> new RuntimeException("Leave tracker not found for employee"));
 
             switch (leave.getLeaveType().toUpperCase()) {

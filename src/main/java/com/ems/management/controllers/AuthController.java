@@ -10,11 +10,14 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.ems.management.dto.request.LoginDTO;
 import com.ems.management.dto.response.ApiError;
 import com.ems.management.dto.response.ApiResponse;
 import com.ems.management.util.JwtService;
+
+@RestController
 @RequestMapping("/auth")
 public class AuthController {
 	

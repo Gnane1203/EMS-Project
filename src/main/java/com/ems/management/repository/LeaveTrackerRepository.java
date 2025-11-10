@@ -9,5 +9,5 @@ import com.ems.management.models.LeaveTracker;
 public interface LeaveTrackerRepository extends JpaRepository<LeaveTracker, Long>{
 
 	// find leave tracker for a specific employee
-    Optional<LeaveTracker> findByEmployeeId(Long employeeId);
+    Optional<LeaveTracker> findByEmployee_empId(Long employeeId);
 }
