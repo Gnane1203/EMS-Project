@@ -23,7 +23,6 @@ public class JwtService {
 
 	
 	public String generateToken(String username) {
-		
 		return Jwts.builder()
 				.subject(username)
 				.issuedAt(new Date(System.currentTimeMillis()))

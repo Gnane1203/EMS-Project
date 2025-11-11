@@ -1,14 +1,11 @@
 package com.ems.management.service.impl;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.ems.management.models.Employee;
 import com.ems.management.models.OvertimeTracker;
-import com.ems.management.repository.EmployeeRepository;
 import com.ems.management.repository.OvertimeTrackerRepository;
 import com.ems.management.service.OvertimeTrackerService;
 
@@ -19,8 +16,6 @@ public class OvertimeTrackerServiceImpl implements OvertimeTrackerService{
 	   @Autowired
 	    private OvertimeTrackerRepository overtimeRepo;
 
-	    @Autowired
-	    private EmployeeRepository employeeRepo;
 
 
 	    @Override
