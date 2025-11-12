@@ -1,5 +1,37 @@
-{"properties": [{
-  "name": "app.consumers",
-  "type": "java.lang.String",
-  "description": "A description for 'app.consumers'"
-}]}
+{"properties": [
+  {
+    "name": "app.consumers",
+    "type": "java.lang.String",
+    "description": "A description for 'app.consumers'"
+  },
+  {
+    "name": "spring.datasource.h2.driver-class-name",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.h2.driver-class-name'"
+  },
+  {
+    "name": "spring.datasource.h2.driver-class-name",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.h2.driver-class-name'"
+  },
+  {
+    "name": "spring.datasource.h2.password",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.h2.password'"
+  },
+  {
+    "name": "spring.datasource.h2.username",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.h2.username'"
+  },
+  {
+    "name": "==\nspring.datasource.h2.",
+    "type": "java.lang.String",
+    "description": "A description for '==\nspring.datasource.h2.'"
+  },
+  {
+    "name": "-1\nspring.datasource.h2.driver-class-n",
+    "type": "java.lang.String",
+    "description": "A description for '-1\nspring.datasource.h2.driver-class-n'"
+  }
+]}

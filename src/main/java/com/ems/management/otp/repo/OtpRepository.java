@@ -1,0 +1,15 @@
+package com.ems.management.otp.repo;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.ems.management.otp.model.OtpEntry;
+
+public interface OtpRepository extends JpaRepository<OtpEntry, Long> {
+	List<OtpEntry> findByExpiryTimeBefore(LocalDateTime now);
+	Optional<OtpEntry> findByEmail(String email);
+	
+}
