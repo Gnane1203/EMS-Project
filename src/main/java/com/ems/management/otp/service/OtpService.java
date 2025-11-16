@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.ems.management.dto.request.LoginOtpDTO;
 import com.ems.management.models.Employee;
@@ -13,6 +14,7 @@ import com.ems.management.repository.EmployeeRepository;
 import com.ems.management.util.EmailService;
 import com.ems.management.util.GenerateOtp;
 
+@Service
 public class OtpService {
 	private final OtpRepository otpRepository;
 

@@ -19,7 +19,7 @@ public class OtpCleanupService {
     }
 
     // Runs every 1 minute
-    @Scheduled(fixedRate = 60000)
+    @Scheduled(fixedRate = 60000*5)
     public void removeExpiredOtps() {
         LocalDateTime now = LocalDateTime.now();
         List<OtpEntry> expired = otpRepository.findByExpiryTimeBefore(now);
