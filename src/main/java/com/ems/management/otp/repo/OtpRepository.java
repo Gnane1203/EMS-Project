@@ -12,5 +12,6 @@ import com.ems.management.otp.model.OtpEntry;
 public interface OtpRepository extends JpaRepository<OtpEntry, Long> {
 	List<OtpEntry> findByExpiryTimeBefore(LocalDateTime now);
 	Optional<OtpEntry> findByEmail(String email);
+	void deleteByEmail(String email);
 	
 }

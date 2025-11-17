@@ -30,6 +30,11 @@ public class OtpService {
 	}
 
 	public void saveOtp(String email, String otp) {
+		Optional<OtpEntry> eotp= otpRepository.findByEmail(email);
+		if (eotp.isPresent()) {
+			otpRepository.deleteById(eotp.get().getId());
+					}
+		
 		otpRepository.save(new OtpEntry(null, email, otp, LocalDateTime.now().plusMinutes(5)));
 	}
 
