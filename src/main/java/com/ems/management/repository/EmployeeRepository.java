@@ -22,4 +22,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long>{
     
     // check email is exists or not
     public boolean existsByEmail(String email);
+    
+    public void deleteByEmail(String email);
 }

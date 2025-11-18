@@ -3,6 +3,7 @@ package com.ems.management.service.impl;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +16,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.ems.management.dto.request.EmployeeAddDto;
+import com.ems.management.dto.response.EmployeeResponseDto;
 import com.ems.management.exeption.ExceptionTemplate;
 import com.ems.management.mappers.EmployeeModelMapper;
+import com.ems.management.mappers.EmployeeResponseMapper;
 import com.ems.management.models.Employee;
 import com.ems.management.models.LeaveTracker;
 import com.ems.management.repository.EmployeeRepository;
@@ -79,26 +82,24 @@ public class EmployeeServiceImpl implements EmployeeService, UserDetailsService{
 
     //get all list of employee
     @Override
-    public List<Employee> getAllEmployees() {
-        return repo.findAll();
+    public List<EmployeeResponseDto> getAllEmployees() {
+        return repo.findAll().stream()
+        		.filter(Objects::nonNull)
+        		.map(EmployeeResponseMapper::empResponse)
+        		.toList();
     }
 
     //update an employee
     @Transactional
     @Override
-    public Employee updateEmployee(Employee employee) {
+    public Employee updateEmployee(Long id, EmployeeAddDto employee) {
     	
-    	Employee existing = repo.findById(employee.getEmpId())
-    	        .orElseThrow(() -> new RuntimeException("Employee not found with ID: " + employee.getEmpId()));
+    	Employee existing = repo.findById(id)
+    	        .orElseThrow(() -> new ExceptionTemplate("Employee not found with ID: " + id , HttpStatus.NOT_FOUND));
 
-    	    existing.setEmpName(employee.getEmpName());
-    	    existing.setEmail(employee.getEmail());
-    	    existing.setRole(employee.getRole());
-    	    existing.setPrimaryManager(employee.getPrimaryManager());
-    	    existing.setUpdatedAt(LocalDateTime.now());
-    	    // copy only editable fields, not password or sensitive fields
+    	    Employee updatedEmployee=empMapper.employeeMapper(employee, existing);
 
-    	    return repo.save(existing);
+    	    return repo.save(updatedEmployee);
     }
     
     //delete an  employee
@@ -127,6 +128,35 @@ public class EmployeeServiceImpl implements EmployeeService, UserDetailsService{
 	public Employee getById(Long id) {
 		
 		return repo.findById(id).orElseThrow(()-> new ExceptionTemplate("employee Not found", HttpStatus.NOT_FOUND));
+	}
+
+	@Override
+	public EmployeeResponseDto findbyIdResponse(Long id) {
+		Employee employee =getById(id);
+		
+		return EmployeeResponseMapper.empResponse(employee);
+	}
+
+	@Override
+	public void deleteEmployee(String email) {
+		findByEmail(email);
+		repo.deleteByEmail(email);
+		
+	}
+
+	@Override
+	public EmployeeResponseDto findbyIdResponse(String email) {
+		Employee emp= findByEmail(email)
+				.orElseThrow(()-> new ExceptionTemplate("employee not found", HttpStatus.NOT_FOUND));
+		
+		return EmployeeResponseMapper.empResponse(emp);
+	}
+
+	@Override
+	public void deleteEmployeebyid(Long id) {
+		getById(id);
+		repo.deleteById(id);
+		
 	}
 
 }
