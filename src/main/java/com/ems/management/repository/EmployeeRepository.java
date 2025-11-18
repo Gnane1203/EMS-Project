@@ -19,4 +19,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long>{
 
     // find by role (optional, if needed for admin filtering)
     List<Employee> findByRole_roleName(String roleName);
+    
+    // check email is exists or not
+    public boolean existsByEmail(String email);
 }

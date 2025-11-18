@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,6 +14,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.ems.management.dto.request.EmployeeAddDto;
+import com.ems.management.exeption.ExceptionTemplate;
+import com.ems.management.mappers.EmployeeModelMapper;
 import com.ems.management.models.Employee;
 import com.ems.management.models.LeaveTracker;
 import com.ems.management.repository.EmployeeRepository;
@@ -31,25 +35,20 @@ public class EmployeeServiceImpl implements EmployeeService, UserDetailsService{
 
 	@Autowired
 	private LeaveTrackerRepository leaveTrackerRepo;
-	
 	@Autowired
-	private PasswordEncoder passwordEncoder;
+	private EmployeeModelMapper empMapper;
 	
 	//create employee
 	@Transactional
     @Override
-    public Employee register(Employee employee) {
+    public Employee register(EmployeeAddDto employee) {
 		
 		if (repo.findByEmail(employee.getEmail()).isPresent()) {
-	        throw new RuntimeException("Email already registered: " + employee.getEmail());
+	        throw new ExceptionTemplate("Email already registered: " + employee.getEmail(),HttpStatus.CONFLICT);
 	    }
-		String hashPassword=passwordEncoder.encode(employee.getPasswordHash());
-		// Encoding the password
-	    employee.setPasswordHash(hashPassword);
-	    
-	    
-		// Save employee first
-    	Employee savedEmp = repo.save(employee);
+		Employee employeeModel=empMapper.employeeMapper(employee, new Employee());
+		
+    	Employee savedEmp = repo.save(employeeModel);
         // Create default LeaveTracker
         LeaveTracker tracker = new LeaveTracker(savedEmp);
         tracker.setCasualLeaves(12);
@@ -122,6 +121,12 @@ public class EmployeeServiceImpl implements EmployeeService, UserDetailsService{
 		return org.springframework.security.core.userdetails.User.builder().username(email).password(user.getPasswordHash())
 				.authorities(Collections.singletonList(new SimpleGrantedAuthority(user.getRole().getRoleName())))
 				.build();
+	}
+
+	@Override
+	public Employee getById(Long id) {
+		
+		return repo.findById(id).orElseThrow(()-> new ExceptionTemplate("employee Not found", HttpStatus.NOT_FOUND));
 	}
 
 }

@@ -8,6 +8,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,6 +19,8 @@ import com.ems.management.dto.request.LoginDTO;
 import com.ems.management.dto.request.LoginOtpDTO;
 import com.ems.management.dto.response.ApiError;
 import com.ems.management.dto.response.ApiResponse;
+import com.ems.management.exeption.ExceptionTemplate;
+import com.ems.management.otp.service.ForgetPasswordService;
 import com.ems.management.otp.service.OtpService;
 import com.ems.management.util.JwtService;
 
@@ -36,6 +39,10 @@ public class AuthController {
 
 	@Autowired
 	private OtpService otpService;
+	
+	// add Forget Password Service.
+	@Autowired
+	private ForgetPasswordService forgetPasswordService;
 
 	/***
 	 * @author Sreenivas
@@ -77,18 +84,42 @@ public class AuthController {
 		}
 
 	}
-	/** 
+
+	/**
 	 * login with otp
 	 * 
 	 */
 	@PostMapping("/otp")
-	public ResponseEntity<ApiResponse<String>> otpLogin(@RequestBody LoginOtpDTO details){
+	public ResponseEntity<ApiResponse<String>> otpLogin(@RequestBody LoginOtpDTO details) {
 		try {
-			boolean flag=otpService.validOtp(details);
-			if(!flag) throw new Exception("invalid Otp");
+			boolean flag = otpService.validOtp(details);
+			if (!flag)
+				throw new Exception("invalid Otp");
 			String jwtToken = jwtService.generateToken(details.Username());
 
 			return new ResponseEntity<>(ApiResponse.success("login success fully", jwtToken), HttpStatus.OK);
+
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+					.body(ApiResponse.failure(e.getMessage(), e.getMessage()));
+		}
+	}
+
+	/** 
+	 * Forgot Password controllers
+	 *"/fp/verify"-- this is used to verify the email
+	 *"/fp/update" -- this is used to update password 
+	 
+	 */
+	
+	@PostMapping("/fp/verify")
+	public ResponseEntity<ApiResponse<String>> fpMailVerify(@RequestBody LoginOtpDTO fOtp){
+		try {
+			boolean flag=otpService.validOtp(fOtp);
+			if(!flag) throw new Exception("invalid Otp");
+			
+
+			return new ResponseEntity<>(ApiResponse.success("Otp verification  success-fully", "Email verified"), HttpStatus.OK);
 
 			
 		} catch (Exception e) {
@@ -96,4 +127,32 @@ public class AuthController {
 					.body(ApiResponse.failure(e.getMessage(), e.getMessage()));
 		}
 	}
+
+	
+	@PatchMapping("/fp/update")
+	public ResponseEntity<ApiResponse<String>> fpUpdatePwd(@RequestBody LoginDTO data){
+		
+		try {
+			String message=forgetPasswordService.forgetPassword(data);
+			return new ResponseEntity<>(ApiResponse.success("updated success-fully", message), HttpStatus.OK);
+
+			
+		} catch (ExceptionTemplate e) {
+			return ResponseEntity.status(e.getStatusCode())
+					.body(ApiResponse.failure(e.getMessage(), e.getMessage()));
+		}
+		
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

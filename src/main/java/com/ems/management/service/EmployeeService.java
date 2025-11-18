@@ -3,12 +3,13 @@ package com.ems.management.service;
 import java.util.List;
 import java.util.Optional;
 
+import com.ems.management.dto.request.EmployeeAddDto;
 import com.ems.management.models.Employee;
 
 public interface EmployeeService {
 	
 	//create employee
-	Employee register(Employee employee);
+	Employee register(EmployeeAddDto employee);
 	
 	//find an employee or get
     Optional<Employee> findByEmail(String email);
@@ -21,5 +22,8 @@ public interface EmployeeService {
     
     //delete an  employee
     boolean deleteEmployee(Long id);
+    
+    //find by id
+    public Employee getById(Long id);
 
 }
