@@ -75,7 +75,7 @@ public class AppConfig {
 	CorsFilter  corsFilter() {
 		CorsConfiguration config = new CorsConfiguration();
         config.setAllowedOrigins(appUrls); // frontend origin
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true); // 
 
