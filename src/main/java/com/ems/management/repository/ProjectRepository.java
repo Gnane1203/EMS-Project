@@ -2,6 +2,8 @@ package com.ems.management.repository;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.ems.management.models.Project;
@@ -12,5 +14,9 @@ public interface ProjectRepository extends JpaRepository<Project, Long>{
 	List<Project> findByProjectManagerEmpId(Long empId);
 	
     List<Project> findByProjectNameContainingIgnoreCase(String projectName);
+    List<Project> findByProjectManager_EmpId(Long managerId);
+    
+    Page<Project> findByProjectManager_EmpIdAndProjectNameContainingIgnoreCase(
+            Long managerId, String name, Pageable pageable);
  
 }

@@ -10,6 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.ems.management.dto.request.EmployeeAddDto;
+import com.ems.management.dto.request.RoleDTO;
 import com.ems.management.models.Employee;
 import com.ems.management.models.Project;
 import com.ems.management.models.Role;
@@ -46,8 +47,9 @@ public class EmployeeModelMapper {
 		employee.setActive(edto.getActive());
 		employee.setIsAdmin(edto.getIsAdmin());
 		//find role and update it
-		Role role=roleService.getRoleById(edto.getRole());
+		Role role = roleService.getRoleEntityById(edto.getRole());
 		employee.setRole(role);
+
 		
 		// find project Manager and update
 		
