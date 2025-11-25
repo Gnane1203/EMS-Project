@@ -125,4 +125,10 @@ public class TimeSheetRequestServiceImpl implements TimeSheetRequestService {
         ts.setApproverDate(LocalDateTime.now());
         return timeSheetRepo.save(ts);
     }
+
+	@Override
+	public List<TimeSheetRequest> getManagerTimeSheets(Long managerId, String status) {
+		
+		return timeSheetRepo.findByApprover_EmpIdAndStatus(managerId, status);
+	}
 }

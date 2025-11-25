@@ -17,6 +17,8 @@ public interface TimeSheetRequestService {
 
     // Manager views pending or approved/rejected timesheets of employees
     List<TimeSheetRequest> getManagerTimeSheets(Long managerId);
+    // Manager filters timesheets by status
+    List<TimeSheetRequest> getManagerTimeSheets(Long managerId,String status);
 
     // Admin views timesheets across all employees by status
     List<TimeSheetRequest> getAllTimeSheetsByStatus(String status);
