@@ -61,13 +61,19 @@ public class AppConfig {
 		http.authorizeHttpRequests(req -> {
 			req.requestMatchers("/auth/**","/v3/api-docs/**",
                     "/swagger-ui/**",
-                    "/swagger-ui.html").permitAll().anyRequest().authenticated();
+                    "/swagger-ui.html").permitAll()
+			.requestMatchers("/admin/**").hasRole("ADMIN")
+			.requestMatchers("/manager/**").hasRole("MANAGER")
+			
+			
+			.anyRequest().authenticated();
 		});
 		http.csrf(csrf -> csrf.disable());
 		http.addFilterBefore(corsFilter(),UsernamePasswordAuthenticationFilter.class);
 		http.addFilterBefore(jwtFilter,UsernamePasswordAuthenticationFilter.class);
 		
 		// http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+		
 		return http.build();
 	}
 	

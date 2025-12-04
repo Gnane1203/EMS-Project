@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ems.management.dto.request.EmployeeAddDto;
@@ -20,13 +21,14 @@ import com.ems.management.exeption.ExceptionTemplate;
 import com.ems.management.models.Employee;
 import com.ems.management.service.EmployeeService;
 
+@RequestMapping("/admin")
 @RestController
 public class EmployeeContoller {
 	@Autowired
 	private EmployeeService empservice;
 	
 	
-	@PostMapping("/api/v1/employee")
+	@PostMapping("/employee")
 	public ResponseEntity<ApiResponse<Long>> saveEmployee(@RequestBody EmployeeAddDto emp){
 		try {
 			Employee emp1 =empservice.register(emp);
@@ -39,7 +41,7 @@ public class EmployeeContoller {
 		}
 	}
 
-	@PutMapping("/api/v1/employee/{id}")
+	@PutMapping("/employee/{id}")
 	public ResponseEntity<ApiResponse<String>> updateEmployee(@PathVariable Long id, @RequestBody EmployeeAddDto emp){
 		try {
 			empservice.updateEmployee(id, emp);
@@ -56,7 +58,7 @@ public class EmployeeContoller {
 	}
 	
 	
-	@GetMapping("/api/v1/employee/id/{id}")
+	@GetMapping("/employee/id/{id}")
 	public ResponseEntity<ApiResponse<EmployeeResponseDto>> findEmployee(@RequestBody Long id){
 		try {
 			return ResponseEntity.status(HttpStatus.OK)
@@ -69,7 +71,7 @@ public class EmployeeContoller {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ApiResponse.failure(e.getMessage(), null));
 		}
 	}
-	@GetMapping("/api/v1/employee/email/{email}")
+	@GetMapping("/employee/email/{email}")
 	public ResponseEntity<ApiResponse<EmployeeResponseDto>> findEmployeeEmail(@RequestBody String email){
 		try {
 			return ResponseEntity.status(HttpStatus.OK)
@@ -83,13 +85,13 @@ public class EmployeeContoller {
 		}
 	}
 	
-	@GetMapping("/api/v1/employee")
+	@GetMapping("/employee")
 	public ResponseEntity<ApiResponse<List<EmployeeResponseDto>>> findAllEmployeess(){
 		return ResponseEntity.status(HttpStatus.OK)
 				.body(ApiResponse.success("employee successfully updated", empservice.getAllEmployees()));
 	}
 	
-	@DeleteMapping("/api/v1/employee/id/{id}")
+	@DeleteMapping("/employee/id/{id}")
 	public ResponseEntity<ApiResponse<String>> deleteEmployee(@PathVariable Long id, @RequestBody EmployeeAddDto emp){
 		try {
 			empservice.deleteEmployee(id);
@@ -104,7 +106,7 @@ public class EmployeeContoller {
 		}
 		
 	}
-	@DeleteMapping("/api/v1/employee/email/{email}")
+	@DeleteMapping("/employee/email/{email}")
 	public ResponseEntity<ApiResponse<String>> deleteEmployeeByEmail(@PathVariable String email){
 		try {
 			empservice.deleteEmployee(email);
